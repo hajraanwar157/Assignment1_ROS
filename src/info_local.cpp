@@ -1,5 +1,5 @@
 #include <chrono>
-#include <random>  // for random number generation
+#include <random> 
 #include <memory>
 #include "rclcpp/rclcpp.hpp"
 #include "assignment1_hajra/msg/robot_info.hpp"
@@ -16,17 +16,15 @@ public:
       [this]() -> void {
         auto message = assignment1_hajra::msg::RobotInfo();
         message.robot_name = "Robot 1";
-        message.pose.x=1+count_;
-        message.pose.y=2+count_;
-        //message.pose.theta=0.5;
-        message.pose.theta = fmod(0.1 * count_, 2 * M_PI); 
-        message.temperature = distribution_(generator_);
-        //message.temperature=5;
-        RCLCPP_INFO(this->get_logger(), "Publishing: robot name=%s x=%.2f y=%.2f theta=%.2f temperature=%.2f", message.robot_name.c_str(),message.pose.x,message.pose.y,message.pose.theta,message.temperature);
+        message.pose.x=5;
+        message.pose.y=10;
+        message.pose.theta=0.5; //radian
+        message.temperature = distribution_(generator_); //generate random temperature value between 20 to 40
+        RCLCPP_INFO(this->get_logger(), "Publishing: robot name=%s x=%.2f y=%.2f theta=%.2f temperature=%.2f",    message.robot_name.c_str(),message.pose.x,message.pose.y,message.pose.theta,message.temperature);
         this->publisher_->publish(message);
         count_++;
       };
-    timer_ = this->create_wall_timer(2000ms, timer_callback);
+    timer_ = this->create_wall_timer(1000ms, timer_callback);
   }
 
 private:
